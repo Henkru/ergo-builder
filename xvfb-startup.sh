@@ -5,4 +5,6 @@ XVFB_PROC=$!
 sleep 1
 export DISPLAY=:99
 "$@"
+EXIT_CODE=$?
 kill $XVFB_PROC
+exit $EXIT_CODE
