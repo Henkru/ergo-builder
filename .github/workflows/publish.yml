@@ -1,18 +1,34 @@
 name: Build and publish a Docker image to ghcr.io
 on:
-  release:
-    types: [ published ]
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 jobs:
   docker_publish:
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-22.04"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Build and publish a Docker image for ${{ github.repository }}
-        uses: macbre/push-to-ghcr@master
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          image_name: ${{ github.repository }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the Docker image
+        run: |
+          tag=${GITHUB_REF#refs/tags/}
+          if [ "$tag" = "$GITHUB_REF" ]; then
+            tag="latest"
+          else
+            tag=${tag:1}
+          fi
+          image=ghcr.io/${GITHUB_REPOSITORY,,}
+          docker build . -t ${image}:${tag}
+          docker push ${image} --all-tags
+    permissions:
+      contents: read
+      packages: write
