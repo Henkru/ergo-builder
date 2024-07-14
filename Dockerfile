@@ -12,6 +12,7 @@ RUN apt-get update \
     wget \
     xvfb \
     libgl1-mesa-dri \
+    zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install freerouting
