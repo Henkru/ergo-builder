@@ -14,6 +14,7 @@ RUN apt-get update \
     libgl1-mesa-dri \
     zip \
     jq \
+    pipx \
     && rm -rf /var/lib/apt/lists/*
 
 # Install freerouting
@@ -25,6 +26,9 @@ RUN sed -i 's/\r$//' /xvfb-startup.sh
 ENV XVFB_RES="${RESOLUTION}"
 ENV XVFB_ARGS="${XARGS}"
 ENV FREEROUTING_PATH="/freerouting.jar"
+
+# Install keymap-drawer
+RUN pipx install keymap-drawer
 
 WORKDIR /kicad-project
 ENTRYPOINT ["/bin/bash", "/xvfb-startup.sh"]
