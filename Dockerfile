@@ -29,7 +29,7 @@ ENV FREEROUTING_PATH="/freerouting.jar"
 
 # Install keymap-drawer
 RUN pipx install keymap-drawer==0.17.0
-ENV PATH="$PATH:/root/.local/pipx/venvs/keymap-drawer/bin"
+ENV PATH="$PATH:/root/.local/bin"
 
 WORKDIR /kicad-project
 ENTRYPOINT ["/bin/bash", "/xvfb-startup.sh"]
